@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Dimensions, Image} from 'react-native';
+import {Platform, StyleSheet, Text, View, Dimensions, Image, FlatList} from 'react-native';
 
 const width = Dimensions.get('screen').width;
 const height = width;
@@ -29,16 +29,18 @@ export default class App extends Component<Props> {
       {id: 3, usuario: 'Lizarralde'}
     ];
     return (
-      <View style={{marginTop: 30}}>
-        {fotos.map(foto => 
-          <View key={foto.id}>
-            <Text>{foto.usuario}</Text>
+      <FlatList style={{marginTop: 30}}
+        keyExtractor={item => String(item.id)}
+        data={fotos}
+        renderItem={({item}) =>
+          <View>
+            <Text>{item.usuario}</Text>
             <Image source={require('./resources/img/person.png')}
               style={{width: width, height: height}} />
           </View>
-        )}
-      </View>
-    );
+        }
+      />
+    );  
   }
 }
 
