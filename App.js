@@ -29,14 +29,16 @@ export default class App extends Component<Props> {
       {id: 3, usuario: 'Lizarralde'}
     ];
     return (
-      <FlatList style={{marginTop: 30}}
+      <FlatList style={styles.container}
         keyExtractor={item => String(item.id)}
         data={fotos}
         renderItem={({item}) =>
           <View>
-            <Text>{item.usuario}</Text>
-            <Image source={require('./resources/img/person.png')}
-              style={{width: width, height: height}} />
+            <View style={styles.header}>
+              <Image source={require('./resources/img/person.png')} style={styles.profilePhoto} />  
+              <Text>{item.usuario}</Text>
+            </View>
+            <Image source={require('./resources/img/person.png')} style={styles.postPhoto} />
           </View>
         }
       />
@@ -46,19 +48,21 @@ export default class App extends Component<Props> {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    marginTop: 30
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  header: {
+    margin: 10, 
+    flexDirection: 'row', 
+    alignItems: 'center'
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  profilePhoto: {
+    marginRight: 10, 
+    borderRadius: 20, 
+    width: 40, 
+    height: 40
   },
+  postPhoto: {
+    width: width, 
+    height: height
+  }
 });
