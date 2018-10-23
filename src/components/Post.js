@@ -43,6 +43,31 @@ export default class Post extends Component {
     }
     this.setState({post: updatedPost})
   }
+
+  showLikes(likers) {
+    if (likers.length < 1) {
+      return;
+    }
+
+    return (
+      <Text styles={styles.likes}>
+        {likers.length} {likers.length > 1 ? 'curtidas' : 'curtida'}
+      </Text>
+    );
+  }
+
+  showComments(post) {
+    if (post.comment == '')
+      return;
+
+    return (
+      <View style={styles.comments}>
+          <Text style={styles.commentsTitle}>{post.loginUsuario}</Text>
+          <Text>{post.comment}</Text>
+      </View>
+    );
+
+  }
   
   render() {
     const { post } = this.state;
@@ -62,6 +87,8 @@ export default class Post extends Component {
                 <Image style={styles.likeButton} 
                   source={this.loadLikeButton(post.liked)} />  
               </TouchableOpacity>
+              {this.showLikes(post.likers)}
+              {this.showComments(post)}
             </View> 
         </View>
     );  
@@ -85,11 +112,22 @@ const styles = StyleSheet.create({
     height: height
   },
   likeButton: {
+    marginBottom: 10,
     width: 40,
     height: 40
   },
   footer: {
     margin: 10
+  },
+  likes: {
+    fontWeight: 'bold'
+  },
+  comments: {
+    flexDirection: 'row'
+  },
+  commentsTitle: {
+      fontWeight: 'bold',
+      marginRight: 5
   }
 
 });
