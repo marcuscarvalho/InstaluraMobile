@@ -27,7 +27,7 @@ export default class Post extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      post: this.props.foto
+      post: this.props.foto 
     }
   }
 
@@ -36,10 +36,25 @@ export default class Post extends Component {
       : require('../../resources/img/s2.png')
   }
 
-  likePhoto() {
+  like() {
+    const { post } = this.state;
+
+    let likedList = []
+    if (post.liked) {
+      likedList = post.likers.filter(liker => {
+        return liker.name !== 'Marcus'
+      })
+    } else {
+      likedList = [
+        ...post.likers,
+        {name: 'Marcus'}
+      ]
+    }
+
     const updatedPost = {
-      ...this.state.post,
-      liked: !this.state.post.liked
+      ...post,
+      liked: !post.liked,
+      likers: likedList
     }
     this.setState({post: updatedPost})
   }
@@ -83,7 +98,7 @@ export default class Post extends Component {
                 style={styles.postPhoto} />
 
             <View style={styles.footer}>
-              <TouchableOpacity onPress={this.likePhoto.bind(this)}>
+              <TouchableOpacity onPress={this.like.bind(this)}>
                 <Image style={styles.likeButton} 
                   source={this.loadLikeButton(post.liked)} />  
               </TouchableOpacity>
