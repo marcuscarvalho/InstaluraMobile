@@ -9,7 +9,8 @@
 import React, {Component} from 'react';
 import {
   Platform, 
-  StyleSheet, Text, View, Dimensions, Image, FlatList, TouchableOpacity} from 'react-native';
+  StyleSheet, Text, TextInput, View, Dimensions, Image, 
+  FlatList, TouchableOpacity} from 'react-native';
 
 const width = Dimensions.get('screen').width;
 const height = width;
@@ -27,7 +28,8 @@ export default class Post extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      post: this.props.foto 
+      post: this.props.foto,
+      comentarioValue: ''
     }
   }
 
@@ -42,12 +44,12 @@ export default class Post extends Component {
     let likedList = []
     if (post.liked) {
       likedList = post.likers.filter(liker => {
-        return liker.name !== 'Marcus'
+        return liker.name !== 'Marcus' // TODO: refactor
       })
     } else {
       likedList = [
         ...post.likers,
-        {name: 'Marcus'}
+        {name: 'Marcus'} // TODO: refactor
       ]
     }
 
@@ -72,16 +74,35 @@ export default class Post extends Component {
   }
 
   showComments(post) {
-    if (post.comment == '')
+    if (post.comentario == '')
       return;
 
     return (
       <View style={styles.comments}>
           <Text style={styles.commentsTitle}>{post.loginUsuario}</Text>
-          <Text>{post.comment}</Text>
+          <Text>{post.comentario}</Text>
       </View>
     );
+  }
 
+  adicionaComentario() {
+    if (this.state.comentarioValue === '') {
+      return;
+    }
+
+    const comentariosAtualizado = [...this.state.post.comentarios, {
+      id: this.state.comentarioValue, // TODO: refactor
+      login: 'marcus', // TODO: refactor
+      texto: this.state.comentarioValue
+    }];
+
+    const postAtualizado = {
+      ...this.state.post,
+      comentarios: comentariosAtualizado
+    }
+
+    this.setState({post: postAtualizado, comentarioValue: ''});
+    this.inputComentario.clear();
   }
   
   render() {
@@ -104,6 +125,23 @@ export default class Post extends Component {
               </TouchableOpacity>
               {this.showLikes(post.likers)}
               {this.showComments(post)}
+
+              {post.comentarios.map(comentario =>
+                <View style={styles.comments} key={comentario.id}>
+                  <Text style={styles.commentsTitle}>{comentario.login}</Text>
+                  <Text>{comentario.texto}</Text>
+                </View>
+                )}
+                
+              <View style={styles.novoComentario}>
+                <TextInput style={styles.input} placeholder="Adicione um comentário..." 
+                  ref={input => this.inputComentario = input} 
+                  onChangeText={valor => this.setState({comentarioValue: valor})} />
+                
+                <TouchableOpacity onPress={this.adicionaComentario.bind(this)}>
+                  <Image style={styles.icone} source={require('../../resources/img/send.png')} /> 
+                </TouchableOpacity>
+              </View>
             </View> 
         </View>
     );  
@@ -143,6 +181,20 @@ const styles = StyleSheet.create({
   commentsTitle: {
       fontWeight: 'bold',
       marginRight: 5
+  },
+  novoComentario: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd'
+  },
+  input: {
+    flex: 1,
+    height: 40
+  },
+  icone: {
+    width: 30,
+    height: 30
   }
 
 });

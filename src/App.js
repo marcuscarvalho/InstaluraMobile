@@ -28,13 +28,14 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    
     fetch('http://localhost:8080/api/public/fotos/marcus')
-        .then(resposta => resposta.json())
-        .then(json => this.setState({fotos: json}))
-        .catch(e => {
-          console.warn('The photos were not loaded: ' + e);
-          this.setState({status: 'ERRO'})
-        });
+      .then(resposta => resposta.json())
+      .then(json => this.setState({fotos: json}))
+      .catch(e => {
+        console.warn('The photos were not loaded: ' + e);
+        this.setState({status: 'ERRO'})
+      });
   }
 
   render() {
